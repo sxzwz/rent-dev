@@ -7,7 +7,9 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import java.time.LocalDateTime;
 import java.io.Serializable;
 
+import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.rent.mapper.CommunityMapper;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -28,7 +30,7 @@ import lombok.experimental.Accessors;
 @TableName("community")
 
 // 小区实体类
-public class Community {
+public class Community  {
 
     /**
      * 小区信息表主键ID，自增

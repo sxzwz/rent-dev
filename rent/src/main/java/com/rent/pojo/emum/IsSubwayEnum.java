@@ -10,10 +10,10 @@ import lombok.Getter;
 @AllArgsConstructor
 public enum IsSubwayEnum {
 
-    STATUS_1(true, "临近"),
-    STATUS_2(false, "非临近");
+    STATUS_1(1, "临近"),
+    STATUS_2(0, "非临近");
 
-    private final Boolean type;
+    private final Integer type;
     private final String detail;
 
 }

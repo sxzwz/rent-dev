@@ -18,7 +18,7 @@ import java.util.List;
  */
 
 @RestController
-@RequestMapping("/landLord")
+@RequestMapping("/landlord")
 @Tag(name = "房东信息长居驻地管理")
 public class LandlordController {
 
@@ -60,7 +60,7 @@ public class LandlordController {
     }
 
     /**
-     * 查询房东信息
+     * 查询房东信息列表
      *
      * @param landlordQueryDTO 查询参数
      * @return Result<List < LandlordVO>> 响应结果

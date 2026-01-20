@@ -19,6 +19,33 @@ const routes = [
     component: () => import(`@/views/view/Index.vue`)
   },
   {
+    path: "/service-center",
+    name: "serviceCenter",
+    component: () => import(`@/views/service/Index.vue`),
+    children: [
+      {
+        path: "landlord",
+        component: () => import(`@/views/service/Landlord.vue`)
+      },
+      {
+        path: "post-house",
+        component: () => import(`@/views/service/PostHouse.vue`)
+      },
+      {
+        path: "house-list",
+        component: () => import(`@/views/service/HouseList.vue`)
+      },
+      {
+        path: "flow-index",
+        component: () => import(`@/views/service/FlowIndex.vue`)
+      },
+      {
+        path: "house-order-info",
+        component: () => import(`@/views/service/HouseOrderInfo.vue`)
+      }
+    ]
+  },
+  {
     path: "/reply-landlord",
     name: "replyLandlord",
     component: () => import(`@/views/user/ReplyLandlord.vue`)
@@ -53,6 +80,30 @@ const routes = [
         show: true,
         icon: "el-icon-user",
         component: () => import(`@/views/admin/UserManage.vue`),
+        meta: { requireAuth: true }
+      },
+      {
+        path: "/landlord-manage",
+        name: "房东管理",
+        show: true,
+        icon: "el-icon-user-solid",
+        component: () => import(`@/views/admin/LandlordManage.vue`),
+        meta: { requireAuth: true }
+      },
+      {
+        path: "/community-manage",
+        name: "小区管理",
+        show: true,
+        icon: "el-icon-s-help",
+        component: () => import(`@/views/admin/CommunityManage.vue`),
+        meta: { requireAuth: true }
+      },
+      {
+        path: "/community-update",
+        name: "修改小区信息",
+        show: false,
+        icon: "el-icon-user",
+        component: () => import(`@/views/admin/CommunityUpdate.vue`),
         meta: { requireAuth: true }
       },
       {

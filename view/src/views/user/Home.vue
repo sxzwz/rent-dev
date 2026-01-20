@@ -31,7 +31,7 @@ export default {
     },
     async fetchLandlordData() {
       try {
-        const { data } = await this.$axios.post("/landLord/listUser", {});
+        const { data } = await this.$axios.post("/landlord/listUser", {});
         this.landlord = data;
         console.log(this.landlord);
       } catch (error) {

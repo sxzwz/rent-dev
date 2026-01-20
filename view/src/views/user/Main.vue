@@ -2,7 +2,7 @@
   <div class="app-container">
     <!-- 顶部导航栏 -->
     <header class="app-header">
-      <div class="position">
+      <div class="position" v-if="userArea.length !== 0">
         <i class="el-icon-location"></i>
 
         <span
@@ -55,6 +55,14 @@
             </span>
 
             <el-dropdown-menu slot="dropdown" class="user-dropdown">
+              <el-dropdown-item
+                v-if="landlord !== null"
+                @click.native="serviceCenter"
+                icon="el-icon-menu"
+              >
+                服务中心
+              </el-dropdown-item>
+
               <el-dropdown-item
                 @click.native="updateUserInfo"
                 icon="el-icon-user-solid"
@@ -190,7 +198,7 @@
               <el-upload
                 style="margin-left: 20px;"
                 class="avatar-uploader"
-                action="rent/file/upload"
+                action="file/upload"
                 :show-file-list="false"
                 :on-success="handleImageSuccess"
               >
@@ -374,7 +382,8 @@ export default {
       topArea: [], // 省份信息存放数组
       cityArea: [], // 市区存放数组
       topAreaId: null,
-      cityAreaId: null
+      cityAreaId: null,
+      landlord: {}
     };
   },
   async created() {
@@ -383,8 +392,17 @@ export default {
       this.initRouteHandling();
     }
     this.fetchUserArea();
+    this.fetchLadlordReplyInfo();
   },
   methods: {
+    async fetchLadlordReplyInfo() {
+      try {
+        const { data } = await this.$axios.post("/landlord/listUser", {});
+        this.landlord = data;
+      } catch (error) {
+        console.log("查询房东申请信息异常：", error);
+      }
+    },
     changeAddress() {
       this.dialogUserArea = true;
       this.fetchTopArea();
@@ -467,6 +485,9 @@ export default {
       if (res.code === 200) {
         this.avatar = res.data;
       }
+    },
+    serviceCenter() {
+      window.open("service-center", "_blank");
     },
     updateUserInfo() {
       this.avatar = this.userInfo.avatar;

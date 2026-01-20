@@ -21,5 +21,8 @@ public class LandlordQueryDTO extends QueryDTO {
     // 审核状态 (0:未审核 1:已审核)
     private Boolean isAudit;
 
+    // 身份证号
+    private String idcard;
+
 
 }

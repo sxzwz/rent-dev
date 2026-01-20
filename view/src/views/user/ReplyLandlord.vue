@@ -14,7 +14,7 @@
         />
         <el-upload
           class="idcard-uploader"
-          action="rent/file/upload"
+          action="file/upload"
           :show-file-list="false"
           :on-success="handleImageSuccess"
         >
@@ -33,7 +33,7 @@
         />
         <el-upload
           class="idcard-uploader"
-          action="rent/file/upload"
+          action="file/upload"
           :show-file-list="false"
           :on-success="handleImageOppsiteSuccess"
         >
@@ -67,9 +67,8 @@ export default {
     };
   },
   created() {},
-  
-  methods: {
 
+  methods: {
     handleImageOppsiteSuccess(res, file) {
       // 通知提示
       this.$notify({

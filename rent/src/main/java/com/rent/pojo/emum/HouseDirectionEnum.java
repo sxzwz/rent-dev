@@ -26,4 +26,19 @@ public enum HouseDirectionEnum {
      */
     private final String detail;
 
+    /**
+     * 通过状态获取状态描述
+     *
+     * @param type 状态
+     * @return String
+     */
+    public static String getDetail(Integer type) {
+        for (HouseDirectionEnum value : HouseDirectionEnum.values()) {
+            if (value.getType().equals(type)) {
+                return value.getDetail();
+            }
+        }
+        return "其他";
+    }
+
 }
