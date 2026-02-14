@@ -1,8 +1,10 @@
 package com.rent.pojo.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 
 /**
  * 房屋列表VO类
@@ -61,4 +63,13 @@ public class HouseListItemVO {
      * 押金方式，比如押一付一
      */
     private String depositMethodName;
+    /**
+     * 房屋状态
+     */
+    private Integer status;
+    /**
+     * 创建时间
+     */
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createTime;
 }

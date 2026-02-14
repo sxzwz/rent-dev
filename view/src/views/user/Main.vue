@@ -3,9 +3,12 @@
     <!-- 顶部导航栏 -->
     <header class="app-header">
       <div class="position" v-if="userArea.length !== 0">
-        <i class="el-icon-location"></i>
+        <i
+          style="font-size: 18px;margin-right: 6px;"
+          class="el-icon-location"
+        ></i>
 
-        <span
+        <span style="font-size: 18px;"
           >{{ userArea[0].topAreaName }} · {{ userArea[0].cityAreaName }}</span
         >
 
@@ -16,10 +19,10 @@
         <div class="main-nav">
           <Logo
             class="logo"
-            :logoSize="Number(46)"
+            :logoSize="Number(26)"
             :fontSize="Number(20)"
             textColor="rgb(51,51,51)"
-            sysName="房屋租赁系统"
+            sysName="海螺租房"
           />
         </div>
 
@@ -30,7 +33,7 @@
             :to="item.path"
             class="nav-item"
             active-class="active"
-            @click="closeMobileMenu"
+            @click="closeMobileMenu(item)"
           >
             <i style="margin-right: 6px;" :class="item.icon"></i>
 
@@ -372,7 +375,17 @@ export default {
       dialogPasswordOperation: false, // 修改密码弹窗开关
       dialogUserInfoVisible: false, // 修改信息弹窗开关
       dialogOutOperation: false, // 退出登录弹窗控制开关
-      navItems: [{ path: "/home", icon: "", title: "首页" }],
+      navItems: [
+        { path: "/home", icon: "", title: "首页" },
+        { path: "/house-news", icon: "el-icon-tickets", title: "房屋资讯" },
+        {
+          path: "/my-house-order-info",
+          icon: "el-icon-c-scale-to-original",
+          title: "预约看房"
+        },
+        { path: "/notice-list", icon: "", title: "系统公告" },
+        { path: "/my-save", icon: "", title: "我的收藏" }
+      ],
       userInfo: {},
       isAuthChecked: false,
       isMobileMenuOpen: false,
@@ -546,7 +559,7 @@ export default {
       clearRole();
       this.$router.push("/");
     },
-    closeMobileMenu() {
+    closeMobileMenu(item) {
       this.isMobileMenuOpen = false;
     },
     async handleAuthentication() {
@@ -614,17 +627,20 @@ export default {
 
 <style scoped lang="scss">
 .position {
-  padding: 20px 60px;
-  background-color: rgb(51, 51, 51);
-  color: rgb(255, 255, 255);
+  padding: 20px 65px;
+  background-color: rgb(255, 255, 255);
+  color: rgb(51, 51, 51);
 
   .change-address {
     font-size: 12px;
     margin-left: 10px;
     cursor: pointer;
+    background-color: rgb(240, 240, 240);
+    padding: 4px 10px;
+    border-radius: 5px;
 
     &:hover {
-      color: rgb(55, 171, 33);
+      background-color: rgb(230, 230, 230);
     }
   }
 }
@@ -646,18 +662,17 @@ export default {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
-  background-color: rgb(255, 255, 255);
-  overflow-x: hidden;
+  // background-color: rgb(240, 240, 240);
 }
 
 .app-header {
   background-color: rgb(255, 255, 255);
-  // padding-inline: 100px;
   margin-bottom: 10px;
-  z-index: 100;
+  z-index: 1000;
   position: sticky;
   top: 0;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 8px rgb(230, 230, 230);
 }
 
 .header-content {
@@ -665,8 +680,8 @@ export default {
   justify-content: space-between;
   align-items: center;
   margin: 0 auto;
-  padding: 0 40px;
-  height: 74px;
+  padding: 0 50px;
+  height: 55px;
   position: relative;
 }
 
@@ -681,12 +696,12 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 16px;
+  gap: 26px;
 }
 
 .nav-item {
   color: rgb(51, 51, 51);
-  font-size: 14px;
+  font-size: 16px;
   text-decoration: none;
   height: 74px;
   line-height: 74px;
@@ -789,12 +804,11 @@ export default {
 
 .app-main {
   flex: 1;
-  // margin-inline: 120px;
-  margin-inline: 20px;
   box-sizing: border-box;
-  padding: 10px 30px;
-  background-color: rgb(255, 255, 255);
+  // background-color: rgb(240, 240, 240);
   border-radius: 5px;
+  padding-inline: 20px;
+  box-sizing: border-box;
 }
 
 .user-avatar-container {

@@ -66,6 +66,16 @@ public class CommunityController {
         return communityService.list(communityQueryDTO);
     }
 
+    /**
+     * 根据ID查询小区详情信息
+     * @param id
+     * @return
+     */
+    @GetMapping("/getById/{id}")
+    public Result<CommunityVO> getById(@PathVariable Integer id){
+        return communityService.selectById(id);
+    }
+
 
 
 

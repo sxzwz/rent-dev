@@ -35,7 +35,6 @@ public class UserAreaController {
      * @return
      */
     @PostMapping("/save")
-    @Operation(summary = "新增用户长居驻地信息")
     public Result<String> save(@RequestBody UserArea userArea) {
         return userAreaService.saveEntity(userArea);
     }

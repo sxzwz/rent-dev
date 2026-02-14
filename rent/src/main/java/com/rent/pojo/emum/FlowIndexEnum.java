@@ -12,7 +12,8 @@ public enum FlowIndexEnum {
 
     VIEW(1, "浏览"),
     COLLECTION(2, "收藏"),
-    REMAIN(3, "停留");
+    REMAIN(3, "停留"),
+    SHOW(4, "展现");
 
     /**
      * 类型

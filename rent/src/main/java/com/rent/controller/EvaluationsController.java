@@ -5,9 +5,9 @@ import com.rent.pojo.api.Result;
 import com.rent.pojo.dto.EvaluationsQueryDTO;
 import com.rent.pojo.entity.Evaluations;
 import com.rent.service.EvaluationsService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import javax.annotation.Resource;
 
 /**
  * 评论 Controller
@@ -16,7 +16,7 @@ import javax.annotation.Resource;
 @RequestMapping("/evaluations")
 public class EvaluationsController {
 
-    @Resource
+    @Autowired
     private EvaluationsService evaluationsService;
 
     /**

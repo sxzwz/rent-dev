@@ -31,15 +31,25 @@ public class UserAreaServiceImpl extends ServiceImpl<UserAreaMapper, UserArea> i
      */
     @Override
     public Result<String> saveEntity(UserArea userArea) {
-        UserAreaQueryDTO userAreaQueryDTO = new UserAreaQueryDTO();
+       /* UserAreaQueryDTO userAreaQueryDTO = new UserAreaQueryDTO();
         // 1.获取并设置当前用户id
         userAreaQueryDTO.setUserId(LocalThreadHolder.getUserId());
         // 2.查看当前用户是否已存在常居住地
-        Integer count = baseMapper.listCount(userAreaQueryDTO);
+        Integer count = this.baseMapper.listCount(userAreaQueryDTO);
         AssertUtils.isTrue(count == 0, "请不要重复新增常居住地");
         // 3.保存常住地信息
         save(userArea);
-        return ApiResult.success("用户常住地新增成功");
+        System.out.println("用户ID" + LocalThreadHolder.getUserId() + "常住地" + userArea.getAreaId());
+        return ApiResult.success("用户常住地新增成功");*/
+
+        UserAreaQueryDTO userAreaQueryDTO = new UserAreaQueryDTO();
+        userAreaQueryDTO.setUserId(LocalThreadHolder.getUserId());
+        Integer count = this.baseMapper.listCount(userAreaQueryDTO);
+        AssertUtils.isTrue(count == 0, "请不要重复新增常居住地");
+        save(userArea);
+        System.out.println("用户ID" + LocalThreadHolder.getUserId() + "常住地" + userArea.getAreaId());
+
+        return ApiResult.success("常居住地新增成功");
     }
 
     /**

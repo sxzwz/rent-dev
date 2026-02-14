@@ -1,6 +1,7 @@
 package com.rent.Interceptor;
 
 import com.alibaba.fastjson2.JSONObject;
+
 import com.rent.context.LocalThreadHolder;
 import com.rent.pojo.api.ApiResult;
 import com.rent.pojo.api.Result;
@@ -33,7 +34,15 @@ public class JwtInterceptor implements HandlerInterceptor {
         String[] excludePaths = {
                 "/login",
                 "/register",
-                "/file"
+                "/file",
+                "/viewer/listHouseNews", // 游客页房屋资讯接口
+                "/viewer/getNewsById", // 游客页房屋资讯详情
+                "/viewer/listHouse", // 游客页房屋接口
+                "/viewer/getHouseById", // 游客页房屋详情接口
+                "/viewer/houseSizedList", // 游客页房屋户型
+                "/viewer/houseSizeNumber", // 游客页房屋面积
+                "/viewer/houseSizeNumber", // 游客页房屋面积
+                "/viewer/houseRentRange", // 游客页房屋租金
         };
 
         // 检查是否在排除路径中

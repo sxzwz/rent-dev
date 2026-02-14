@@ -305,7 +305,7 @@
         <div
           class="info-bt"
           @click="saveHouse"
-          style="text-align: center;width: 200px;margin-left: 130px;margin-top: 30px;"
+          style="text-align: center;width: 180px;margin-left: 210px;margin-top: 30px;"
         >
           新增房源信息
         </div>
@@ -593,15 +593,17 @@ export default {
   display: flex;
   justify-content: left;
   align-items: center;
+  margin-block: 30px;
   gap: 10px;
   margin-top: 6px;
 
   span {
     width: 150px;
     display: inline-block;
-    text-align: right;
+    text-align: left;
     margin-right: 10px;
-    font-size: 14px;
+    padding: 0 20px;
+    font-size: 16px;
     color: rgb(51, 51, 51);
   }
 }
@@ -610,9 +612,7 @@ export default {
   box-sizing: border-box;
 
   .nav {
-    background-color: rgb(220, 220, 220);
-    padding: 12px 20px;
-    border-bottom: 1px solid rgb(230, 230, 230);
+    margin-bottom: 20px;
   }
 }
 </style>

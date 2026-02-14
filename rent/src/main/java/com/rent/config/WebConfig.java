@@ -42,11 +42,12 @@ public class WebConfig implements WebMvcConfigurer {
         registry.addInterceptor(jwtInterceptor)
                 .addPathPatterns("/**")
                 .excludePathPatterns(
-                        "/swagger-ui/**",          // Swagger UI静态资源
-                        "/v3/api-docs/**",         // API文档JSON数据
-                        "/swagger-resources/**",   // Swagger资源列表
-                        "/swagger-ui/index.html",  // Swagger UI首页
-                        "/webjars/**"
-                );
+                        "/file/**", // 文件上传/访问（不鉴权）
+                        "/service-center/file/**", // 兼容带context-path的文件接口（不鉴权）
+                        "/swagger-ui/**", // Swagger UI静态资源
+                        "/v3/api-docs/**", // API文档JSON数据
+                        "/swagger-resources/**", // Swagger资源列表
+                        "/swagger-ui/index.html", // Swagger UI首页
+                        "/webjars/**");
     }
 }

@@ -36,6 +36,7 @@ public class CommunityServiceImpl extends ServiceImpl<CommunityMapper, Community
 
     /**
      * 修改小区信息
+     *
      * @param community
      * @return
      */
@@ -48,6 +49,7 @@ public class CommunityServiceImpl extends ServiceImpl<CommunityMapper, Community
 
     /**
      * 查询小区信息
+     *
      * @param communityQueryDTO
      * @return
      */
@@ -56,6 +58,22 @@ public class CommunityServiceImpl extends ServiceImpl<CommunityMapper, Community
         List<CommunityVO> communityVOS = this.baseMapper.list(communityQueryDTO);
         Integer count = this.baseMapper.listCount(communityQueryDTO);
         return ApiResult.success(communityVOS, count);
+    }
+
+
+    /**
+     * 通过ID查询小区详情信息
+     *
+     * @param id 小区ID
+     * @return Result<CommunityVO> 响应结果
+     */
+    @Override
+    public Result<CommunityVO> selectById(Integer id) {
+        AssertUtils.notNull(id, "小区ID不能为空");
+        CommunityQueryDTO communityQueryDTO = new CommunityQueryDTO();
+        communityQueryDTO.setId(id);
+        List<CommunityVO> communityVOS = this.baseMapper.list(communityQueryDTO);
+        return ApiResult.success(communityVOS.isEmpty() ? new CommunityVO() : communityVOS.get(0));
     }
 
     public void paramJudge(Community community) {

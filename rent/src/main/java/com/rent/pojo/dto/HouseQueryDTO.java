@@ -1,9 +1,11 @@
 package com.rent.pojo.dto;
 
+import com.rent.pojo.dto.QueryDTO;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.math.BigDecimal;
+import java.util.List;
 
 /**
  * 房屋查询条件类
@@ -76,4 +78,16 @@ public class HouseQueryDTO extends QueryDTO {
      * 租赁类型（1：整租；2：合租）
      */
     private Integer rentalType;
+    /**
+     * 房屋ID列表
+     */
+    private List<Integer> ids;
+    /**
+     * 行为类型
+     */
+    private Integer type;
+    /**
+     * 查询的天数
+     */
+    private Integer days;
 }

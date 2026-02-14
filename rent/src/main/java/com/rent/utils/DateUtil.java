@@ -1,12 +1,14 @@
 package com.rent.utils;
 
-import com.rent.pojo.dto.QueryDTO;
+
+
 import com.rent.pojo.dto.QueryDTO;
 import com.rent.pojo.vo.ChartVO;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -14,6 +16,25 @@ import java.util.List;
  * 时间工具类
  */
 public class DateUtil {
+
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("MM月dd日");
+
+    /**
+     * 生成从今天开始的未来N天的日期列表
+     * @param days 要生成的天数
+     * @return 格式为"xx月xx日"的日期列表
+     */
+    public static List<String> generateFutureDates(int days) {
+        List<String> dateList = new ArrayList<>();
+        LocalDate today = LocalDate.now();
+
+        for (int i = 0; i < days; i++) {
+            LocalDate futureDate = today.plusDays(i);
+            dateList.add(futureDate.format(FORMATTER));
+        }
+
+        return dateList;
+    }
 
     /**
      * 构造时间范围查询器
@@ -71,7 +92,7 @@ public class DateUtil {
                     .count();
             if (count != 0) {
                 // 为了数据更好看，在原始的数据之上，添加一个随机数
-//                chartVOS.add(new ChartVO(dateKey, count * new Random().nextInt(10000)));
+                //                chartVOS.add(new ChartVO(dateKey, count * new Random().nextInt(10000)));
                 chartVOS.add(new ChartVO(dateKey, count)); //这是原始的数据，不想要上述模拟效果，只需要将上一行代码注释掉，这一行放开即可
             }
         }

@@ -2,12 +2,13 @@
   <div class="container-center">
     <div class="top">
       <div class="logo">
+        // eslint-disable-next-line prettier/prettier
         <div>
           <img src="/logo.png" alt="" srcset="" />
         </div>
 
         <div class="text">
-          房屋租赁系统·服务中心
+          服务中心
         </div>
       </div>
 
@@ -24,42 +25,23 @@
 
     <div class="service-cotainer">
       <div class="left">
-        <el-menu
-          @select="select"
-          style="border-right: 0;"
-          default-active="2"
-          class="el-menu-vertical-demo"
-          @open="handleOpen"
-          @close="handleClose"
-        >
-          <el-menu-item index="1">
-            <i class="el-icon-document"></i>
+        <div class="nav">
+          <div @click="select('1')"><i class="el-icon-user"></i>房东信息</div>
 
-            <span slot="title">房东信息</span>
-          </el-menu-item>
+          <div @click="select('2-1')">
+            <i class="el-icon-upload"></i>发布房源
+          </div>
 
-          <el-submenu index="2">
-            <template slot="title">
-              <i class="el-icon-s-shop"></i>
+          <div @click="select('2-2')"><i class="el-icon-help"></i>我的房源</div>
 
-              <span>房源管理</span>
-            </template>
+          <div @click="select('2-3')">
+            <i class="el-icon-s-data"></i>流量统计
+          </div>
 
-            <el-menu-item-group>
-              <el-menu-item index="2-1">发布房源</el-menu-item>
-
-              <el-menu-item index="2-2">我发布的房源</el-menu-item>
-
-              <el-menu-item index="2-3">流量统计</el-menu-item>
-            </el-menu-item-group>
-          </el-submenu>
-
-          <el-menu-item index="3">
-            <i class="el-icon-s-finance"></i>
-
-            <span slot="title">预约看房</span>
-          </el-menu-item>
-        </el-menu>
+          <div @click="select('3')">
+            <i class="el-icon-s-finance"></i>预约看房
+          </div>
+        </div>
       </div>
 
       <div class="right">
@@ -111,29 +93,28 @@ export default {
 
 <style scoped lang="scss">
 .right {
-  height: calc(100vh - 60px);
   width: calc(100% - 253px);
-  overflow-y: scroll;
-  padding: 0 4px;
+  padding: 20px 4px;
   box-sizing: border-box;
 }
 
 .container-center {
   width: 100%;
-  height: 100vh;
-  background-color: rgb(240, 240, 240);
+  background-color: rgb(248, 248, 248);
 
   .top {
-    height: 56px;
+    height: 64px;
     width: 100%;
-    padding-inline: 20px;
+    padding-inline: 60px;
     box-sizing: border-box;
     background-color: rgb(255, 255, 255);
-    box-shadow: 0 6px 8px rgb(240, 240, 240);
-    margin-bottom: 4px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    position: sticky;
+    top: 0;
+    z-index: 1000;
+    box-shadow: 0 4px 6px rgb(240, 240, 240);
 
     .logo {
       display: flex;
@@ -158,13 +139,13 @@ export default {
       gap: 6px;
 
       img {
-        width: 25px;
-        height: 25px;
+        width: 40px;
+        height: 40px;
         border-radius: 50%;
       }
 
       .text {
-        font-size: 16px;
+        font-size: 20px;
       }
     }
   }
@@ -174,9 +155,32 @@ export default {
   display: flex;
 
   .left {
-    width: 253px;
+    width: 203px;
+    padding-inline: 10px 20px;
     height: calc(100vh - 60px);
-    background-color: rgb(255, 255, 255);
+    background-color: rgb(248, 248, 248);
+
+    .nav {
+      position: fixed;
+      top: 80px;
+      left: 60px;
+      text-align: center;
+      height: 60px;
+      line-height: 60px;
+      cursor: pointer;
+      font-size: 18px;
+      color: rgb(100, 99, 99);
+
+      div {
+        &:hover {
+          color: rgb(176, 45, 45);
+        }
+
+        i {
+          margin-right: 6px;
+        }
+      }
+    }
   }
 }
 </style>

@@ -16,9 +16,9 @@ import com.rent.pojo.vo.CommentParentVO;
 import com.rent.pojo.vo.EvaluationsVO;
 import com.rent.service.EvaluationsService;
 import com.rent.utils.AhoCorasickFilter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.Resource;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -31,11 +31,11 @@ import java.util.Map;
 @Service
 public class EvaluationsServiceImpl implements EvaluationsService {
 
-    @Resource
+    @Autowired
     private EvaluationsMapper evaluationsMapper;
-    @Resource
+    @Autowired
     private UserMapper userMapper;
-    @Resource
+    @Autowired
     private EvaluationsUpvoteMapper evaluationsUpvoteMapper;
 
     /**

@@ -3,7 +3,7 @@ package com.rent.pojo.vo;
 import lombok.Data;
 
 /**
- * 评论的VO类
+ * 评分的VO类
  */
 @Data
 public class ScoreVO {
@@ -12,11 +12,11 @@ public class ScoreVO {
      */
     private Integer userId;
     /**
-     * 内容
+     * 内容ID
      */
     private Integer contentId;
     /**
      * 评分
      */
-    private Integer score;
+    private Double score;
 }

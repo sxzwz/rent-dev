@@ -1,27 +1,39 @@
 <template>
-  <div class="line-chart-container" ref="container">
-    <div class="chart-header">
-      <span class="chart-title">{{ tag }}</span>
-      <div class="chart-controls">
-        <span class="time-label">时间范围</span>
-        <el-select size="mini" v-model="selectedValue" placeholder="选择期限" @change="handleTimeChange">
-          <el-option v-for="item in timeOptions" :key="item.value" :label="item.label" :value="item.value" />
-        </el-select>
-      </div>
+  <div class="line-main">
+    <div class="header">
+      <span class="tag">{{ tag }}</span>
+
+      <span class="time-show">
+        <span class="top-bar">时间选择</span>
+
+        <Tab
+          :buttons="options"
+          :initialActive="selectedValueItem"
+          @change="handleChange"
+        />
+      </span>
     </div>
-    <div ref="chart" :style="{ width: '100%', height: height }" class="chart-wrapper"></div>
+
+    <div v-if="date.length === 0" class="empty-container">
+      <el-empty description="暂无数据"></el-empty>
+    </div>
+
+    <div v-else class="chart-wrapper">
+      <div ref="chart" class="chart" :style="{ height: height }"></div>
+    </div>
   </div>
 </template>
 
 <script>
-import * as echarts from 'echarts';
-
+import * as echarts from "echarts";
+import Tab from "@/components/Tab"; // 导入封装好的Tab组件
 export default {
-  name: 'EnhancedLineChart',
+  components: { Tab }, // 注册组件
+  name: "DialogLine",
   props: {
     tag: {
       type: String,
-      default: '数据趋势'
+      default: "折线图"
     },
     values: {
       type: Array,
@@ -33,285 +45,201 @@ export default {
     },
     height: {
       type: String,
-      default: '300px'
+      default: "220px"
     },
-    subtext: {
-      type: String,
-      default: '描述'
+    tooltipFormatter: {
+      type: Function,
+      default: params => {
+        // 默认格式：日期 -> 数值
+        return `${params[0].axisValue} -> ${params[0].data}`;
+      }
     }
   },
   data() {
     return {
       chart: null,
-      selectedValue: '最近一年',
-      timeOptions: [
-        { value: 30, label: '最近30天' },
-        { value: 90, label: '最近90天' },
-        { value: 365, label: '最近一年' }
+      options: [
+        { value: 7, label: "一周内" },
+        { value: 30, label: "一个月内" },
+        { value: 90, label: "三个月内" },
+        { value: 365, label: "一年内" }
       ],
-      resizeObserver: null,
-      animationType: 'wave',
-      resizeTimer: null
+      selectedValueItem: 365,
+      isChartReady: false
     };
   },
   watch: {
+    selectedValueItem(newVal) {
+      this.$emit("on-selected", newVal);
+    },
     values: {
       handler() {
-        this.updateChart();
+        this.$nextTick(() => {
+          this.initChart();
+        });
       },
       deep: true
     },
     date: {
       handler() {
-        this.updateChart();
+        this.$nextTick(() => {
+          this.initChart();
+        });
       },
       deep: true
     }
   },
   mounted() {
-    this.initChart();
-    this.setupResizeObserver();
-    window.addEventListener('resize', this.handleResize);
-  },
-  beforeDestroy() {
-    this.cleanup();
+    this.$nextTick(() => {
+      this.initChart();
+    });
   },
   methods: {
-    initChart() {
-      this.chart = echarts.init(this.$refs.chart);
-      this.updateChart();
+    handleChange(obj) {
+      this.selectedValueItem = obj.value;
     },
-    updateChart() {
-      if (!this.chart) return;
+    initChart() {
+      if (!this.$refs.chart) return;
 
-      const option = {
-        backgroundColor: 'transparent',
+      if (this.chart) {
+        this.chart.dispose();
+      }
+
+      try {
+        this.chart = echarts.init(this.$refs.chart);
+        const option = this.getChartOption();
+        this.chart.setOption(option);
+        this.isChartReady = true;
+
+        // 添加窗口大小变化监听
+        window.addEventListener("resize", this.handleResize);
+      } catch (error) {
+        console.error("初始化图表失败:", error);
+      }
+    },
+
+    getChartOption() {
+      return {
         grid: {
-          left: '3%',
-          right: '4%',
-          top: '15%',
-          bottom: '12%',
-          containLabel: true
+          left: 50,
+          right: 10,
+          top: 50,
+          borderWidth: 1
         },
         tooltip: {
-          trigger: 'axis',
-          axisPointer: {
-            type: 'shadow'
-          }
+          trigger: "axis",
+          formatter: this.tooltipFormatter
         },
         xAxis: {
-          type: 'category',
           data: this.date,
+          axisLine: { show: false },
+          axisTick: { show: false },
           axisLabel: {
-            rotate: this.date.length > 15 ? 30 : 0,
-            color: '#666',
-            interval: 0, // 显示所有日期
-            formatter: (value) => {
-              return value; // 直接返回日期值
-            }
-          },
-          axisLine: {
-            lineStyle: {
-              color: '#ddd',
-              type: 'dashed'
-            }
-          },
-          axisTick: {
-            alignWithLabel: true,
-            lineStyle: {
-              color: '#ddd',
-              type: 'dashed'
-            }
-          },
-          splitLine: {
-            show: true,
-            lineStyle: {
-              color: ['#eee'],
-              type: 'dashed'
-            }
+            color: "rgb(51,51,51)",
+            fontSize: "14"
           }
         },
         yAxis: {
-          type: 'value',
-          axisLine: {
-            show: true,
-            lineStyle: {
-              color: '#ddd',
-              type: 'dashed'
-            }
-          },
-          axisTick: {
-            show: true,
-            lineStyle: {
-              color: '#ddd',
-              type: 'dashed'
-            }
-          },
+          axisLine: { show: false },
+          axisTick: { show: false },
           axisLabel: {
-            color: '#666'
-          },
-          splitLine: {
-            lineStyle: {
-              color: ['#eee'],
-              type: 'dashed'
-            }
+            color: "rgb(51,51,51)",
+            fontSize: "14"
           }
         },
-        series: [{
-          smooth: 0.2,
-          symbol: 'circle',
-          name: `${this.subtext}`,
-          type: 'line',
-          smooth: true,
-          data: this.values,
-          lineStyle: {
-            width: 1,
-            color: 'rgb(91, 143, 249)'
-          },
-          areaStyle: {
-            color: 'rgba(91, 143, 249, 0.15)'
-          },
-          animationType: this.animationType,
-          animationDuration: 1500,
-          emphasis: {
-            symbol: 'circle',
-            itemStyle: {
-              color: 'rgb(91, 143, 249)',
-              borderColor: '#fff',
-              borderWidth: 4
-            }
-          },
-          label: {
-            show: true,
-            position: 'top',
-            distance: 10,
-            color: '#666',
-            fontSize: 12,
-            formatter: (params) => {
-              return params.value;
+        series: [
+          {
+            type: "line",
+            smooth: true,
+            data: this.values,
+            areaStyle: {
+              color: "rgba(144, 191, 237, 0.3)"
             },
-            textStyle: {
-              shadowColor: 'rgba(0, 0, 0, 0.2)',
-              shadowBlur: 1
+            lineStyle: {
+              color: "#5B8FF9"
+            },
+            itemStyle: {
+              color: "#5B8FF9",
+              borderColor: "#5B8FF9",
+              borderWidth: 2
+            },
+            label: {
+              show: true,
+              position: "top",
+              color: "rgb(102, 102, 102)"
             }
           }
-        }]
+        ]
       };
-
-      // 根据日期数量自动调整显示间隔
-      if (this.date.length > 30) {
-        option.xAxis.axisLabel.interval = Math.floor(this.date.length / 10);
-      }
-
-      this.chart.setOption(option);
     },
-    handleTimeChange(value) {
-      this.$emit('time-change', value);
-    },
+
     handleResize() {
-      if (this.resizeTimer) {
-        clearTimeout(this.resizeTimer);
-      }
-      this.resizeTimer = setTimeout(() => {
-        this.chart && this.chart.resize();
-        this.resizeTimer = null;
-      }, 200);
-    },
-    setupResizeObserver() {
-      if (typeof ResizeObserver === 'undefined') {
-        return;
-      }
-
-      this.resizeObserver = new ResizeObserver(entries => {
-        for (let entry of entries) {
-          if (entry.target === this.$refs.container) {
-            this.handleResize();
-          }
-        }
-      });
-
-      this.resizeObserver.observe(this.$refs.container);
-    },
-    cleanup() {
       if (this.chart) {
-        this.chart.dispose();
-        this.chart = null;
+        this.chart.resize();
       }
+    }
+  },
+  beforeDestroy() {
+    // 移除窗口大小变化监听
+    window.removeEventListener("resize", this.handleResize);
 
-      if (this.resizeObserver) {
-        this.resizeObserver.disconnect();
-        this.resizeObserver = null;
-      }
-
-      if (this.resizeTimer) {
-        clearTimeout(this.resizeTimer);
-        this.resizeTimer = null;
-      }
-
-      window.removeEventListener('resize', this.handleResize);
+    if (this.chart) {
+      this.chart.dispose();
+      this.chart = null;
     }
   }
 };
 </script>
 
-<style scoped>
-.line-chart-container {
+<style scoped lang="scss">
+.line-main {
   width: 100%;
-  height: 100%;
   display: flex;
   flex-direction: column;
-  border-radius: 4px;
-  overflow: hidden;
-}
 
-.chart-header::after {
-  content: '';
-  width: 100px;
-  height: 12px;
-  background-color: rgba(109, 115, 232, 0.4);
-  position: absolute;
-  top: 30px;
-  left: 50px;
-}
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
 
-.chart-header {
-  position: relative;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 12px 16px;
-}
+    .tag {
+      font-size: 16px;
+      font-weight: bold;
+      color: #333;
+    }
 
-.chart-title {
-  font-size: 24px;
-  font-weight: 600;
-  z-index: 100;
-}
+    .time-show {
+      display: flex;
+      align-items: center;
 
-.chart-controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgb(255, 255, 255);
-  box-sizing: border-box;
-  padding: 2px 4px;
-  gap: 4px;
-  border-radius: 4px;
-}
+      .top-bar {
+        font-size: 12px;
+        margin-right: 10px;
+        color: #666;
+      }
 
-::v-deep .el-select .el-input__inner {
-  width: 100px !important;
-  min-width: 100px;
-  background-color: rgb(246, 246, 246);
-  border: none;
-}
+      .el-select {
+        width: 100px;
+      }
+    }
+  }
 
-.time-label {
-  font-size: 12px;
-  color: #666;
-}
+  .empty-container {
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
 
-.chart-wrapper {
-  flex: 1;
+  .chart-wrapper {
+    width: 100%;
+    flex: 1;
+    position: relative;
+
+    .chart {
+      width: 100%;
+    }
+  }
 }
 </style>

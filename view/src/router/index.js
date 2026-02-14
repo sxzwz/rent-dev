@@ -19,6 +19,41 @@ const routes = [
     component: () => import(`@/views/view/Index.vue`)
   },
   {
+    path: "/notice-detail",
+    name: "noticeDetail",
+    component: () => import(`@/views/user/NoticeDetail.vue`)
+  },
+  {
+    path: "/community-detail",
+    name: "communityDetail",
+    component: () => import(`@/views/user/CommunityDetail.vue`)
+  },
+  {
+    path: "/search-house",
+    name: "searchHouse",
+    component: () => import(`@/views/view/SearchPage.vue`)
+  },
+  {
+    path: "/house-news-page",
+    name: "houseNewsPage",
+    component: () => import(`@/views/view/HouseNewsPage.vue`)
+  },
+  {
+    path: "/house-detail-page",
+    name: "houseDetailPage",
+    component: () => import(`@/views/view/HouseDetailPage.vue`)
+  },
+  {
+    path: "/house-detail",
+    name: "houseDetail",
+    component: () => import(`@/views/user/HouseDetail.vue`)
+  },
+  {
+    path: "/house-news-detail",
+    name: "houseNewsDetail",
+    component: () => import(`@/views/user/HouseNewsDetail.vue`)
+  },
+  {
     path: "/service-center",
     name: "serviceCenter",
     component: () => import(`@/views/service/Index.vue`),
@@ -30,6 +65,10 @@ const routes = [
       {
         path: "post-house",
         component: () => import(`@/views/service/PostHouse.vue`)
+      },
+      {
+        path: "update-house",
+        component: () => import(`@/views/service/UpdateHouse.vue`)
       },
       {
         path: "house-list",
@@ -99,6 +138,38 @@ const routes = [
         meta: { requireAuth: true }
       },
       {
+        path: "/house-manage",
+        name: "房源管理",
+        show: true,
+        icon: "el-icon-s-shop",
+        component: () => import(`@/views/admin/HouseManage.vue`),
+        meta: { requireAuth: true }
+      },
+      {
+        path: "/house-news-manage",
+        name: "房源资讯管理",
+        show: true,
+        icon: "el-icon-tickets",
+        component: () => import(`@/views/admin/HouseNewsManage.vue`),
+        meta: { requireAuth: true }
+      },
+      {
+        path: "/house-order-info-manage",
+        name: "预约看房管理",
+        show: true,
+        icon: "el-icon-s-grid",
+        component: () => import(`@/views/admin/HouseOrderInfoManage.vue`),
+        meta: { requireAuth: true }
+      },
+      {
+        path: "/notice-manage",
+        name: "公告管理",
+        show: true,
+        icon: "el-icon-c-scale-to-original",
+        component: () => import(`@/views/admin/NoticeManage.vue`),
+        meta: { requireAuth: true }
+      },
+      {
         path: "/community-update",
         name: "修改小区信息",
         show: false,
@@ -134,6 +205,30 @@ const routes = [
         path: "/home",
         name: "首页",
         component: () => import(`@/views/user/Home.vue`),
+        meta: { requireAuth: true }
+      },
+      {
+        path: "/house-news",
+        name: "房屋资讯",
+        component: () => import(`@/views/user/HouseNews.vue`),
+        meta: { requireAuth: true }
+      },
+      {
+        path: "/my-house-order-info",
+        name: "我的预约看房",
+        component: () => import(`@/views/user/MyHouseOrderInfo.vue`),
+        meta: { requireAuth: true }
+      },
+      {
+        path: "/notice-list",
+        name: "系统公告",
+        component: () => import(`@/views/user/NoticeList.vue`),
+        meta: { requireAuth: true }
+      },
+      {
+        path: "/my-save",
+        name: "我的收藏",
+        component: () => import(`@/views/user/Save.vue`),
         meta: { requireAuth: true }
       }
     ]

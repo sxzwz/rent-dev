@@ -23,4 +23,6 @@ public interface CommunityService extends IService<Community> {
     // 查询小区信息
     Result<List<CommunityVO>> list(CommunityQueryDTO communityQueryDTO);
 
+    // 根据ID查询小区详情信息
+    Result<CommunityVO> selectById(Integer id);
 }

@@ -4,9 +4,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.rent.pojo.api.Result;
 import com.rent.pojo.dto.HouseQueryDTO;
 import com.rent.pojo.entity.House;
-import com.rent.pojo.vo.HouseListItemVO;
-import com.rent.pojo.vo.LivingFacilityVO;
-import com.rent.pojo.vo.SelectedVO;
+import com.rent.pojo.vo.*;
 
 import java.util.List;
 
@@ -47,4 +45,28 @@ public interface HouseService extends IService<House> {
 
     // 查询房屋设施列表
     Result<List<LivingFacilityVO>> houseLivingFacilityList();
+
+    // 查询房东自己的房源信息
+    Result<List<HouseListItemVO>> landlordHouseList(HouseQueryDTO houseQueryDTO);
+
+    // 房东上架/下架房源信息
+    Result<String> houseStatusDeal(Integer id);
+
+    // 通过ID查询房屋详情信息
+    Result<HouseVO> selectById(Integer id);
+
+    // 查询房屋面积条件查询条件范围
+    Result<List<SelectedVO>> houseSizeNumber();
+
+    // 查询房屋租金查询条件范围
+    Result<List<SelectedVO>> houseRentRange();
+
+    // 统计房屋流量
+    Result<List<HouseFlowIndexVO>> listFlowIndex(HouseQueryDTO houseQueryDTO);
+
+    // 流量指标可视化
+    Result<List<ChartVO>> listChart(HouseQueryDTO houseQueryDTO);
+
+    // 房屋推荐
+    Result<List<HouseListItemVO>> recommend(Integer count);
 }

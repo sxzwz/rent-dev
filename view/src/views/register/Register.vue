@@ -1,6 +1,5 @@
 <template>
   <div class="register-container">
-
     <!-- 注册面板 -->
     <div class="register-panel animated fadeIn">
       <!-- 左侧图片区域 -->
@@ -15,43 +14,75 @@
         <transition-group name="slide-fade" tag="div">
           <div key="header" class="register-header">
             <h2>创建您的账户</h2>
-            <p class="welcome-text">开启您的租房之旅</p>
+
+            <p class="welcome-text">开启您的便捷生活之旅</p>
           </div>
 
           <div key="account" class="input-group">
-            <input v-model="account" class="register-input" placeholder="输入账号" @focus="animateInput('account')"
-              @blur="resetInput('account')" />
+            <input
+              v-model="account"
+              class="register-input"
+              placeholder="输入账号"
+              @focus="animateInput('account')"
+              @blur="resetInput('account')"
+            />
             <span class="input-highlight"></span>
           </div>
 
           <div key="name" class="input-group">
-            <input v-model="username" class="register-input" placeholder="用户名" @focus="animateInput('name')"
-              @blur="resetInput('name')" />
+            <input
+              v-model="username"
+              class="register-input"
+              placeholder="用户名"
+              @focus="animateInput('name')"
+              @blur="resetInput('name')"
+            />
             <span class="input-highlight"></span>
           </div>
 
           <div key="password" class="input-group">
-            <input v-model="password" class="register-input" type="password" placeholder="输入密码"
-              @focus="animateInput('password')" @blur="resetInput('password')" />
+            <input
+              v-model="password"
+              class="register-input"
+              type="password"
+              placeholder="输入密码"
+              @focus="animateInput('password')"
+              @blur="resetInput('password')"
+            />
             <span class="input-highlight"></span>
           </div>
 
           <div key="confirm" class="input-group">
-            <input v-model="againPassword" class="register-input" type="password" placeholder="确认密码"
-              @focus="animateInput('confirm')" @blur="resetInput('confirm')" />
+            <input
+              v-model="againPassword"
+              class="register-input"
+              type="password"
+              placeholder="确认密码"
+              @focus="animateInput('confirm')"
+              @blur="resetInput('confirm')"
+            />
             <span class="input-highlight"></span>
           </div>
 
           <div key="button" class="button-group">
-            <button class="register-btn" @click="registerFunc" @mouseenter="hoverButton(true)"
-              @mouseleave="hoverButton(false)">
+            <button
+              class="register-btn"
+              @click="registerFunc"
+              @mouseenter="hoverButton(true)"
+              @mouseleave="hoverButton(false)"
+            >
               <span class="btn-text">立即注册</span>
+
               <span class="btn-icon">→</span>
             </button>
           </div>
 
           <div key="footer" class="register-footer">
-            <p>已有账户？<span class="login-link" @click="toDoLogin">返回登录</span></p>
+            <p>
+              已有账户？<span class="login-link" @click="toDoLogin"
+                >返回登录</span
+              >
+            </p>
           </div>
         </transition-group>
       </div>
@@ -60,30 +91,32 @@
     <!-- 背景装饰元素 -->
     <div class="bg-elements">
       <div class="circle circle-1"></div>
+
       <div class="circle circle-2"></div>
+
       <div class="circle circle-3"></div>
     </div>
   </div>
 </template>
 
 <script>
-// 注册页 
+// 注册页 - B站「程序员辰星」原创出品
 export default {
   name: "Register",
   data() {
     return {
-      account: '', // 用户账号
-      password: '', // 用户密码
-      againPassword: '', // 用户确认密码
-      username: '', // 用户名
+      account: "", // 用户账号
+      password: "", // 用户密码
+      againPassword: "", // 用户确认密码
+      username: "", // 用户名
       activeInput: null, // 输入框动画
       isButtonHovered: false // 按钮悬停效果
-    }
+    };
   },
   methods: {
     // 返回登录页面
     toDoLogin() {
-      this.$router.push('/login');
+      this.$router.push("/login");
     },
 
     // 输入框动画
@@ -101,13 +134,18 @@ export default {
     },
 
     async registerFunc() {
-      if (!this.account || !this.password || !this.againPassword || !this.username) {
-        this.$message.info('请填写相关信息哦!');
+      if (
+        !this.account ||
+        !this.password ||
+        !this.againPassword ||
+        !this.username
+      ) {
+        this.$message.info("请填写相关信息哦!");
         return;
       }
 
       if (this.password !== this.againPassword) {
-        this.$message.info('前后密码输入不一致!');
+        this.$message.info("前后密码输入不一致!");
         return;
       }
 
@@ -119,10 +157,13 @@ export default {
         account: this.account,
         password: bcryptPassword,
         username: this.username
-      }
+      };
 
       try {
-        const { message } = await this.$axios.post(`user/register`, userRegisterDto);
+        const { message } = await this.$axios.post(
+          `user/register`,
+          userRegisterDto
+        );
         this.$message.success(message);
         this.$router.go(-1); // 返回登录页
       } catch (error) {
@@ -134,12 +175,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap");
 
 * {
   user-select: none;
   box-sizing: border-box;
-  font-family: 'Poppins', 'Segoe UI', sans-serif;
+  font-family: "Poppins", "Segoe UI", sans-serif;
 }
 
 .register-container {
@@ -159,7 +200,7 @@ export default {
     justify-content: left;
     margin: 20px 0;
     width: 100%;
-    max-width: 1200px;
+    max-width: 750px;
     z-index: 2;
   }
 
@@ -167,7 +208,7 @@ export default {
     display: flex;
     border-radius: 16px;
     height: auto;
-    background: linear-gradient(135deg, #6a5acd 0%, #89cff0 100%);
+    background-color: rgb(255, 255, 255);
     box-shadow: 0 20px 40px rgba(96, 84, 185, 0.2);
     overflow: hidden;
     z-index: 2;
@@ -260,10 +301,10 @@ export default {
         }
       }
 
-      .input-group.account .register-input:focus~.input-highlight,
-      .input-group.name .register-input:focus~.input-highlight,
-      .input-group.password .register-input:focus~.input-highlight,
-      .input-group.confirm .register-input:focus~.input-highlight {
+      .input-group.account .register-input:focus ~ .input-highlight,
+      .input-group.name .register-input:focus ~ .input-highlight,
+      .input-group.password .register-input:focus ~ .input-highlight,
+      .input-group.confirm .register-input:focus ~ .input-highlight {
         width: 100%;
       }
 
@@ -276,7 +317,11 @@ export default {
           justify-content: space-between;
           width: 100%;
           height: 50px;
-          background: linear-gradient(90deg, #6a5acd, #89cff0);
+          background: linear-gradient(
+            90deg,
+            rgb(34, 181, 115),
+            rgb(96, 225, 167)
+          );
           color: white;
           border: none;
           border-radius: 8px;
@@ -316,13 +361,18 @@ export default {
           }
 
           &::before {
-            content: '';
+            content: "";
             position: absolute;
             top: 0;
             left: -100%;
             width: 100%;
             height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            background: linear-gradient(
+              90deg,
+              transparent,
+              rgba(255, 255, 255, 0.2),
+              transparent
+            );
             transition: all 0.5s ease;
           }
 
@@ -334,20 +384,20 @@ export default {
 
       .register-footer {
         margin-top: 20px;
-        text-align: center;
+        text-align: right;
 
         p {
           color: #718096;
           font-size: 14px;
 
           .login-link {
-            color: #6a5acd;
+            color: #333;
             font-weight: 500;
             cursor: pointer;
             transition: all 0.2s ease;
 
             &:hover {
-              color: #89cff0;
+              // color: #89cff0;
               text-decoration: underline;
             }
           }
@@ -368,7 +418,11 @@ export default {
     .circle {
       position: absolute;
       border-radius: 50%;
-      background: linear-gradient(135deg, rgba(106, 90, 205, 0.1) 0%, rgba(137, 207, 240, 0.1) 100%);
+      background: linear-gradient(
+        135deg,
+        rgba(106, 90, 205, 0.1) 0%,
+        rgba(137, 207, 240, 0.1) 100%
+      );
 
       &.circle-1 {
         width: 300px;
@@ -399,7 +453,6 @@ export default {
 
 /* 动画定义 */
 @keyframes float {
-
   0%,
   100% {
     transform: translateY(0);
@@ -411,7 +464,6 @@ export default {
 }
 
 @keyframes pulse {
-
   0%,
   100% {
     transform: scale(1);
