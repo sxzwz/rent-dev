@@ -37,4 +37,9 @@ public interface UserService {
 
     Result<String> deleteById(Integer id);
 
+    /**
+     * 找回密码：校验账号+手机号+邮箱一致后重置密码
+     */
+    Result<String> resetPassword(UserResetPasswordDTO userResetPasswordDTO);
+
 }

@@ -22,6 +22,13 @@
     <div class="house-container">
       <div>
         <el-table :data="apiResult.data">
+          <el-table-column
+            prop="id"
+            :sortable="true"
+            width="80"
+            label="序号"
+          ></el-table-column>
+
           <el-table-column prop="houseName" label="房源名">
             <template #default="scope">
               <div class="over-text">
@@ -228,42 +235,70 @@
         </div>
       </div>
 
-      <!-- 状态流转区域 -->
       <div>
-        <status-flow :status-records="houseOrderStatusList" />
-      </div>
+        <!-- 没有评价过,在此评价 -->
+        <div v-if="houseOrderEvaluations.length === 0">
+          <div
+            style="box-sizing: border-box;width: 100%;height: 40px;line-height: 40px;padding-left: 10px;margin-block: 6px;background-color: rgb(246,246,246);"
+          >
+            *您当前没有进行服务评价,请做出评价
+          </div>
 
-      <!-- 拒绝预约 -->
-      <div>
-        <h3>预约失败原由</h3>
+          <div style="margin-block: 10px;">
+            <el-rate v-model="apiParam.score" show-text> </el-rate>
+          </div>
 
-        <el-input
-          :disabled="houseOrderInfo.orderStatus === 3"
-          type="textarea"
-          :rows="2"
-          placeholder="如果拒绝客户预约,请补充原因"
-          v-model="apiParam.rejectCause"
-        >
-        </el-input>
+          <div>
+            <el-input
+              type="textarea"
+              :rows="2"
+              placeholder="评价内容"
+              v-model="apiParam.text"
+            >
+            </el-input>
+          </div>
+
+          <div style="margin-block: 20px;">
+            <span
+              style="margin-left: 0;"
+              class="info-bt"
+              @click="evaluationsSave"
+            >
+              立即提交
+            </span>
+          </div>
+        </div>
+
+        <!-- 已经评价过,只做服务的评价渲染 -->
+        <div v-else>
+          <h3>我的服务评价</h3>
+
+          <div style="background-color: rgb(250,250,250);padding: 10px 20px;">
+            <div style="margin-block: 10px;">
+              <el-rate
+                disabled
+                v-model="houseOrderEvaluations[0].score"
+                show-text
+              >
+              </el-rate>
+            </div>
+
+            <div style="font-size: 14px;margin-block: 10px;">
+              {{ houseOrderEvaluations[0].text }}
+            </div>
+          </div>
+        </div>
       </div>
 
       <span slot="footer" class="dialog-footer">
-        <span class="primary-bt" @click="cancelOperation">关闭</span>
+        <span class="primary-bt" @click="cancelOperation">取消操作</span>
 
         <span
           v-if="houseOrderInfo.orderStatus === 1"
           class="info-bt"
           @click="handleConfirmNo"
         >
-          取消客户预约
-        </span>
-
-        <span
-          v-if="houseOrderInfo.orderStatus === 1"
-          class="info-bt"
-          @click="handleOrderConfirm"
-        >
-          确认客户预约
+          取消预约
         </span>
 
         <span
@@ -281,15 +316,13 @@
 <script>
 import Editor from "@/components/Editor.vue";
 import Tab from "@/components/Tab"; // 导入封装好的Tab组件
-import StatusFlow from "@/components/StatusFlow.vue";
 export default {
-  components: { Editor, Tab, StatusFlow },
+  components: { Editor, Tab },
   data() {
     return {
       apiParam: {
         score: 3,
-        text: "",
-        rejectCause: ""
+        text: ""
       },
       dialogVisible: false,
       direction: "rtl",
@@ -306,36 +339,16 @@ export default {
       },
       deletedItem: {},
       content: "",
-      houseOrderEvaluations: [],
-      houseOrderStatusList: []
+      houseOrderEvaluations: []
     };
   },
   created() {
     this.fetchFreshData();
   },
   methods: {
-    async handleOrderConfirm() {
-      try {
-        this.houseOrderInfo.orderStatus = 2;
-        await this.$axios.put(`/house-order-info/update`, this.houseOrderInfo);
-        this.$message.success("预约确认成功");
-        this.fetchFreshData();
-        this.cancelOperation();
-      } catch (error) {
-        this.$notify.info({
-          title: "错误",
-          message: error.message,
-          duration: 1000
-        });
-      }
-    },
     async handleConfirmNo() {
       try {
-        if (this.apiParam.rejectCause === "") {
-          this.$message.info("请补充拒绝原因");
-          return;
-        }
-        this.houseOrderInfo.orderStatus = 3;
+        this.houseOrderInfo.orderStatus = 4;
         await this.$axios.put(`/house-order-info/update`, this.houseOrderInfo);
         this.$message.success("取消预约成功");
         this.fetchFreshData();
@@ -407,26 +420,9 @@ export default {
         });
       }
     },
-    async update(item) {
-      // 查询预约看房状态流转
-      try {
-        const queryDto = {
-          houseOrderInfoId: item.id
-        };
-        const { data } = await this.$axios.post(
-          `/house-order-status/list`,
-          queryDto
-        );
-        this.houseOrderStatusList = data;
-        this.dialogVisible = true;
-        this.houseOrderInfo = { ...item };
-      } catch (error) {
-        this.$notify.info({
-          title: "错误",
-          message: error.message,
-          duration: 1000
-        });
-      }
+    update(item) {
+      this.dialogVisible = true;
+      this.houseOrderInfo = { ...item };
     },
     async handleSaveConfirm() {
       try {
@@ -483,7 +479,7 @@ export default {
     async fetchFreshData() {
       try {
         const { data, total } = await this.$axios.post(
-          "/house-order-info/listLandlord",
+          "/house-order-info/listUser",
           this.houseOrderInfoQueryDto
         );
         this.apiResult.data = data;

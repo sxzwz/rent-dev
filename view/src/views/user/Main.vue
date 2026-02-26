@@ -201,7 +201,7 @@
               <el-upload
                 style="margin-left: 20px;"
                 class="avatar-uploader"
-                action="file/upload"
+                action="api/v1.0/house-rental-api/file/upload"
                 :show-file-list="false"
                 :on-success="handleImageSuccess"
               >

@@ -16,6 +16,10 @@ public class HouseOrderInfoVO extends HouseOrderInfo {
      */
     private String username;
     /**
+     * 用户手机号
+     */
+    private String phone;
+    /**
      * 用户头像
      */
     private String avatar;

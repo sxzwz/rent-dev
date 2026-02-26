@@ -36,6 +36,7 @@ public class UserAreaController {
      */
     @PostMapping("/save")
     public Result<String> save(@RequestBody UserArea userArea) {
+        userArea.setUserId(LocalThreadHolder.getUserId());
         return userAreaService.saveEntity(userArea);
     }
 
@@ -46,6 +47,7 @@ public class UserAreaController {
      */
     @PutMapping("/update")
     public Result<String> update(@RequestBody UserArea userArea) {
+
         return userAreaService.update(userArea);
     }
 

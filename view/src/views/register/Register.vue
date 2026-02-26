@@ -39,7 +39,29 @@
             />
             <span class="input-highlight"></span>
           </div>
+          <div key="phone" class="input-group">
+            <input
+              v-model="phone"
+              class="register-input"
+              placeholder="手机号"
+              maxlength="11"
+              @focus="animateInput('phone')"
+              @blur="resetInput('phone')"
+            />
+            <span class="input-highlight"></span>
+          </div>
 
+          <div key="email" class="input-group">
+            <input
+              v-model="email"
+              class="register-input"
+              type="text"
+              placeholder="邮箱"
+              @focus="animateInput('email')"
+              @blur="resetInput('email')"
+            />
+            <span class="input-highlight"></span>
+          </div>
           <div key="password" class="input-group">
             <input
               v-model="password"
@@ -109,6 +131,8 @@ export default {
       password: "", // 用户密码
       againPassword: "", // 用户确认密码
       username: "", // 用户名
+      phone: "", // 手机号
+      email: "", // 邮箱
       activeInput: null, // 输入框动画
       isButtonHovered: false // 按钮悬停效果
     };
@@ -138,9 +162,11 @@ export default {
         !this.account ||
         !this.password ||
         !this.againPassword ||
-        !this.username
+        !this.username ||
+        !this.phone ||
+        !this.email
       ) {
-        this.$message.info("请填写相关信息哦!");
+        this.$message.info("请填写账号、用户名、手机号、邮箱和密码!");
         return;
       }
 
@@ -156,7 +182,9 @@ export default {
       const userRegisterDto = {
         account: this.account,
         password: bcryptPassword,
-        username: this.username
+        username: this.username,
+        phone: this.phone.trim(),
+        email: this.email.trim()
       };
 
       try {

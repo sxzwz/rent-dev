@@ -67,7 +67,7 @@
         </div>
 
         <div class="meta-info">
-          <div class="meta-item" @click="communityInfo(house)">
+          <div class="meta-item">
             <i class="el-icon-location"></i>
 
             <span>{{ house.cityAreaName }} · {{ house.communityName }}</span>
@@ -217,13 +217,7 @@
           <div class="info">
             <div class="name">{{ house.landlordName }}</div>
 
-            <div class="role">
-              <div class="save" @click="fetchLandlordHouseList">
-                <i class="el-icon-s-home"></i>
-
-                查看房东名下待租房源
-              </div>
-            </div>
+            <div class="role">房东</div>
           </div>
         </div>
 
@@ -329,58 +323,6 @@
         </div>
       </div>
     </el-drawer>
-
-    <el-drawer
-      title="待租房源"
-      size="40%"
-      :visible.sync="drawerLandlordHouseList"
-      :direction="directionLandlordHouseList"
-      :before-close="handleLandlordHouseClose"
-    >
-      <div>
-        <div class="house-list">
-          <div v-if="landlordHouseList.length === 0">
-            <el-empty description="暂无房屋信息"></el-empty>
-          </div>
-
-          <div
-            @click="houseItemClick(item.id)"
-            class="house-item"
-            v-for="item in landlordHouseList"
-            :key="item.id"
-          >
-            <img :src="item.cover" alt="" />
-            <div>
-              <div class="name">{{ item.name }}</div>
-
-              <div class="point">
-                <div>
-                  <i class="el-icon-location"></i>
-
-                  {{ item.cityAreaName }}&nbsp;·&nbsp;{{ item.communityName }}
-                </div>
-
-                <div>
-                  {{ item.depositMethodName }}
-                </div>
-
-                <div>{{ item.sizeNumber }}m²</div>
-
-                <div>
-                  {{ item.directionName }}
-                </div>
-
-                <div>
-                  {{ item.fitmentStatusName }}
-                </div>
-              </div>
-
-              <div class="rent">¥{{ item.rent }}</div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </el-drawer>
   </div>
 </template>
 
@@ -409,10 +351,7 @@ export default {
       dateOrderList: [],
       selctedDateItem: null,
       selctedDateSplitItem: null,
-      houseOrderEvaluations: [],
-      landlordHouseList: [],
-      directionLandlordHouseList: "rtl", // 房东名下房源显示抽屉方向
-      drawerLandlordHouseList: false
+      houseOrderEvaluations: []
     };
   },
   created() {
@@ -429,29 +368,6 @@ export default {
     window.removeEventListener("beforeunload", this.handlePageLeave);
   },
   methods: {
-    handleLandlordHouseClose() {
-      this.drawerLandlordHouseList = false;
-    },
-    // 跳转至房屋详情页
-    houseItemClick(id) {
-      window.open(`/house-detail?id=${id}`, "_blank");
-    },
-    async fetchLandlordHouseList() {
-      try {
-        const { data } = await this.$axios.post(`/house/listUser`, {
-          landlordId: this.house.landlordId
-        });
-        this.landlordHouseList = data;
-        this.drawerLandlordHouseList = true;
-      } catch (e) {
-        this.$message.info(e.message);
-        console.error("预约看房失败:", e);
-      }
-    },
-    // 跳转小区详情页
-    communityInfo(house) {
-      window.open(`/community-detail?id=${house.communityId}`);
-    },
     async handleConfirmOrder() {
       if (this.selctedDateItem === null) {
         this.$message.info("请选中日期");
@@ -655,52 +571,6 @@ export default {
 </script>
 
 <style scoped lang="scss">
-.house-list {
-  display: flex;
-  flex-wrap: wrap;
-  margin: 10px;
-
-  .house-item {
-    flex: 1 1 400px;
-    display: flex;
-    gap: 10px;
-    padding: 10px;
-    box-sizing: border-box;
-    cursor: pointer;
-
-    .name {
-      font-size: 18px;
-    }
-
-    img {
-      width: 120px;
-      height: 80px;
-      border-radius: 5px;
-    }
-
-    .point {
-      font-size: 12px;
-      margin-block: 10px;
-      display: flex;
-      justify-content: left;
-      align-items: center;
-      gap: 10px;
-      box-sizing: border-box;
-
-      div {
-        background-color: rgb(245, 246, 247);
-        padding: 2px 4px;
-      }
-    }
-
-    .rent {
-      font-size: 22px;
-      font-weight: 800;
-      color: rgb(222, 88, 78);
-    }
-  }
-}
-
 .save {
   background-color: rgb(245, 245, 245);
   padding: 4px 10px;

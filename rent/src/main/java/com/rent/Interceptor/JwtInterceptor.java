@@ -34,6 +34,7 @@ public class JwtInterceptor implements HandlerInterceptor {
         String[] excludePaths = {
                 "/login",
                 "/register",
+                "/user/resetPassword",
                 "/file",
                 "/viewer/listHouseNews", // 游客页房屋资讯接口
                 "/viewer/getNewsById", // 游客页房屋资讯详情

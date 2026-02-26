@@ -6,7 +6,7 @@
     <!-- 导航栏 -->
     <header class="main-header">
       <div class="logo-container">
-        <Logo sysName="海螺租房" textColor="#fff" />
+        <Logo sysName="房屋租赁系统" textColor="#fff" />
       </div>
 
       <button class="login-btn" @click="goLogin">
@@ -102,7 +102,7 @@
 
     <!-- 底部CTA -->
     <section class="cta-section">
-      <h2>立即加入海螺租房</h2>
+      <h2>立即加入房屋租赁</h2>
 
       <p>注册即可查看完整房源信息并预约看房</p>
 

@@ -229,7 +229,7 @@
 
         <el-slider
           style="width: 300px;"
-          :max="10"
+          :max="27"
           v-model="house.subwayLine"
           :step="1"
           show-stops

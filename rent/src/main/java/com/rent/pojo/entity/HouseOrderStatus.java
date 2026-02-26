@@ -24,7 +24,7 @@ import lombok.experimental.Accessors;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-@TableName("area")
+@TableName("house_order_status")
 
 
 public class HouseOrderStatus  {

@@ -137,5 +137,14 @@ public class UserController {
         return userService.query(userQueryDTO);
     }
 
+    /**
+     * 找回密码：需同时输入账号、手机号、邮箱，三者与数据库一致后才允许修改密码（无需登录）
+     */
+    @PostMapping(value = "/resetPassword")
+    @ResponseBody
+    public Result<String> resetPassword(@RequestBody UserResetPasswordDTO userResetPasswordDTO) {
+        return userService.resetPassword(userResetPasswordDTO);
+    }
+
 }
 

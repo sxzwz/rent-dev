@@ -39,7 +39,7 @@ public class HouseNewsController {
      * @param houseNews
      * @return
      */
-    @PostMapping("/update")
+    @PutMapping("/update")
     public Result<String> update(@RequestBody HouseNews houseNews) {
         return houseNewsService.updateEntity(houseNews);
     }

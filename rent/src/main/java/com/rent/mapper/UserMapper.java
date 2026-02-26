@@ -27,4 +27,10 @@ public interface UserMapper {
 
     User getUserByUsername(@Param(value = "username") String account);
 
+    /**
+     * 根据账号、手机号、邮箱同时匹配查询用户（用于找回密码校验）
+     */
+    User getUserByAccountPhoneEmail(@Param("account") String account,
+                                    @Param("phone") String phone,
+                                    @Param("email") String email);
 }

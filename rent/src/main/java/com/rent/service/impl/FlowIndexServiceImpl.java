@@ -108,24 +108,23 @@ public class FlowIndexServiceImpl extends ServiceImpl<FlowIndexMapper, FlowIndex
      */
     @Override
     public Result<String> saveOperation(FlowIndex flowIndex) {
-        // 1.判断实体信息
         judge(flowIndex);
         FlowIndexQueryDTO flowIndexQueryDTO = createQueryDTO(
-                FlowIndexEnum.VIEW.getType(),
+                FlowIndexEnum.COLLECTION.getType(),
                 flowIndex.getContentId(),
-                flowIndex.getContentType()
-        );
-        // 2.判断用户是否收藏
+                flowIndex.getContentType());
+        // 先判断用户是不是已经收藏了这篇信息
         List<FlowIndex> flowIndexList = this.baseMapper.list(flowIndexQueryDTO);
-        if (!flowIndexList.isEmpty()) {
-            // 1.若不为空则取消收藏
+        if (!flowIndexList.isEmpty()) { // 用户已经收藏这篇信息的情况
+            // 取消收藏 - 删除用户关于这一条收藏记录的信息
             removeById(flowIndexList.get(0).getId());
             return ApiResult.success("取消收藏成功");
         }
-        FlowIndex entity = createEntity(FlowIndexEnum.COLLECTION.getType(),
+        FlowIndex entity = createEntity(
+                FlowIndexEnum.COLLECTION.getType(),
                 flowIndex.getContentId(),
-                flowIndex.getContentType());
-        // 若为空则保存实体信息
+                flowIndex.getContentType()
+        );
         save(entity);
         return ApiResult.success("收藏成功");
     }

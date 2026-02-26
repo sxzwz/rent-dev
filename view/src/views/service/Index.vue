@@ -2,7 +2,6 @@
   <div class="container-center">
     <div class="top">
       <div class="logo">
-        // eslint-disable-next-line prettier/prettier
         <div>
           <img src="/logo.png" alt="" srcset="" />
         </div>

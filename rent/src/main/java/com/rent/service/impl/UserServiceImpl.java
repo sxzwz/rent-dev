@@ -47,7 +47,15 @@ public class UserServiceImpl implements UserService {
     public Result<String> register(UserRegisterDTO userRegisterDTO) {
         AssertUtils.hasText(userRegisterDTO.getUsername(), "用户名不能为空");
         AssertUtils.hasText(userRegisterDTO.getAccount(), "账号不能为空");
+        AssertUtils.hasText(userRegisterDTO.getPhone(), "手机号不能为空");
+        AssertUtils.hasText(userRegisterDTO.getEmail(), "邮箱不能为空");
         AssertUtils.isFalse(ValidationUtils.containsChinese(userRegisterDTO.getAccount()), "账号不能包含中文");
+        if (!ValidationUtils.isValidMobile(userRegisterDTO.getPhone())) {
+            return ApiResult.error("手机号格式错误，请填写正确手机号");
+        }
+        if (!ValidationUtils.isValidEmail(userRegisterDTO.getEmail())) {
+            return ApiResult.error("请填写正确邮箱");
+        }
         // 通过用户名查询用户信息
         User userEntity = userMapper.getUserByUsername(userRegisterDTO.getUsername());
         AssertUtils.isTrue(userEntity == null, "用户名已经被使用，请换一个");
@@ -252,5 +260,29 @@ public class UserServiceImpl implements UserService {
         ids.add(id);
         userMapper.batchDelete(ids);
         return ApiResult.success();
+    }
+
+    /**
+     * 找回密码：账号、手机号、邮箱三者与数据库一致才允许修改密码
+     */
+    @Override
+    public Result<String> resetPassword(UserResetPasswordDTO dto) {
+        AssertUtils.hasText(dto.getAccount(), "账号不能为空");
+        AssertUtils.hasText(dto.getPhone(), "手机号不能为空");
+        AssertUtils.hasText(dto.getEmail(), "邮箱不能为空");
+        AssertUtils.hasText(dto.getNewPassword(), "新密码不能为空");
+        AssertUtils.hasText(dto.getAgainPassword(), "请再次输入新密码");
+        AssertUtils.equals(dto.getNewPassword(), dto.getAgainPassword(), "两次输入的新密码不一致");
+        if (StringUtils.hasText(dto.getEmail()) && !ValidationUtils.isValidEmail(dto.getEmail())) {
+            return ApiResult.error("请填写正确邮箱");
+        }
+        if (StringUtils.hasText(dto.getPhone()) && !ValidationUtils.isValidMobile(dto.getPhone())) {
+            return ApiResult.error("手机号格式错误");
+        }
+        User user = userMapper.getUserByAccountPhoneEmail(dto.getAccount(), dto.getPhone(), dto.getEmail());
+        AssertUtils.isTrue(user != null, "账号、手机号与邮箱不匹配，请核对后重试");
+        user.setPassword(dto.getNewPassword());
+        userMapper.update(user);
+        return ApiResult.success("密码重置成功，请使用新密码登录");
     }
 }

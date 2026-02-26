@@ -13,8 +13,7 @@
       <div class="right-login">
         <transition-group name="slide-fade" tag="div">
           <div key="header" class="login-header">
-            <h2>这里是海螺租房</h2>
-
+            <h2>这里是房屋租赁系统</h2>
             <p class="welcome-text">开启你的便捷生活之旅</p>
           </div>
 
@@ -49,7 +48,6 @@
               @mouseleave="hoverButton(false)"
             >
               <span class="btn-text">立即登录</span>
-
               <span class="btn-icon">→</span>
             </button>
           </div>
@@ -60,17 +58,86 @@
                 >点此注册</span
               >
             </p>
+            <p>
+              忘记密码？<span class="register-link" @click="openResetDialog"
+                >找回密码</span
+              >
+            </p>
           </div>
         </transition-group>
       </div>
     </div>
+    <!-- 找回密码弹窗 -->
+    <el-dialog
+      title="找回密码"
+      :visible.sync="resetDialogVisible"
+      width="420px"
+      class="reset-dialog"
+      :close-on-click-modal="false"
+      @close="closeResetDialog"
+    >
+      <el-form
+        ref="resetForm"
+        :model="resetForm"
+        :rules="resetFormRules"
+        label-width="90px"
+        size="medium"
+      >
+        <el-form-item label="账号" prop="account">
+          <el-input
+            v-model="resetForm.account"
+            placeholder="请输入账号"
+            clearable
+          />
+        </el-form-item>
+        <el-form-item label="手机号" prop="phone">
+          <el-input
+            v-model="resetForm.phone"
+            placeholder="请输入注册时的手机号"
+            clearable
+          />
+        </el-form-item>
+        <el-form-item label="邮箱" prop="email">
+          <el-input
+            v-model="resetForm.email"
+            placeholder="请输入注册时的邮箱"
+            clearable
+          />
+        </el-form-item>
+        <el-form-item label="新密码" prop="newPassword">
+          <el-input
+            v-model="resetForm.newPassword"
+            type="password"
+            placeholder="请输入新密码"
+            show-password
+            clearable
+          />
+        </el-form-item>
+        <el-form-item label="确认密码" prop="againPassword">
+          <el-input
+            v-model="resetForm.againPassword"
+            type="password"
+            placeholder="请再次输入新密码"
+            show-password
+            clearable
+          />
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="closeResetDialog">取消</el-button>
+        <el-button
+          type="primary"
+          :loading="resetSubmitting"
+          @click="submitResetPassword"
+          >确认重置</el-button
+        >
+      </span>
+    </el-dialog>
 
     <!-- 背景装饰元素 -->
     <div class="bg-elements">
       <div class="circle circle-1"></div>
-
       <div class="circle circle-2"></div>
-
       <div class="circle circle-3"></div>
     </div>
   </div>
@@ -87,13 +154,90 @@ export default {
       account: "",
       password: "",
       activeInput: null,
-      isButtonHovered: false
+      isButtonHovered: false,
+      resetDialogVisible: false,
+      resetSubmitting: false,
+      resetForm: {
+        account: "",
+        phone: "",
+        email: "",
+        newPassword: "",
+        againPassword: ""
+      },
+      resetFormRules: {
+        account: [{ required: true, message: "请输入账号", trigger: "blur" }],
+        phone: [{ required: true, message: "请输入手机号", trigger: "blur" }],
+        email: [{ required: true, message: "请输入邮箱", trigger: "blur" }],
+        newPassword: [
+          { required: true, message: "请输入新密码", trigger: "blur" }
+        ],
+        againPassword: [
+          { required: true, message: "请再次输入新密码", trigger: "blur" }
+        ]
+      }
     };
   },
   methods: {
     // 跳转注册页面
     toDoRegister() {
       this.$router.push("/register");
+    },
+
+    openResetDialog() {
+      this.resetForm = {
+        account: "",
+        phone: "",
+        email: "",
+        newPassword: "",
+        againPassword: ""
+      };
+      this.resetDialogVisible = true;
+    },
+
+    closeResetDialog() {
+      this.resetDialogVisible = false;
+    },
+
+    async submitResetPassword() {
+      this.$refs.resetForm.validate(valid => {
+        if (!valid) return;
+        this.doResetPassword();
+      });
+    },
+
+    async doResetPassword() {
+      const {
+        account,
+        phone,
+        email,
+        newPassword,
+        againPassword
+      } = this.resetForm;
+
+      if (newPassword !== againPassword) {
+        this.$message.warning("两次输入的新密码不一致");
+        return;
+      }
+      const bcryptNew = this.$md5(this.$md5(newPassword));
+      const bcryptAgain = this.$md5(this.$md5(againPassword));
+      this.resetSubmitting = true;
+      try {
+        const { message } = await this.$axios.post("user/resetPassword", {
+          account,
+          phone,
+          email,
+          newPassword: bcryptNew,
+          againPassword: bcryptAgain
+        });
+        this.$message.success(message || "密码重置成功，请使用新密码登录");
+        this.closeResetDialog();
+      } catch (error) {
+        this.$message.error(
+          error.message || "重置失败，请核对账号、手机号与邮箱是否一致"
+        );
+      } finally {
+        this.resetSubmitting = false;
+      }
     },
 
     // 输入框动画
@@ -140,7 +284,7 @@ export default {
         this.$message.error(error.message);
       }
     }
-  }
+  } // methods 闭合
 };
 </script>
 
